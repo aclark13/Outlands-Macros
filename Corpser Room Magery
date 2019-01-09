@@ -1,0 +1,32 @@
+/////////////////////////////////
+/////// Corpser Room Macro //////
+////////// Version 2.0 //////////
+/////////////////////////////////
+//mana check
+if skill 'magery' < 60 and mana < 11
+  useskill "meditation"
+  while mana < maxmana
+  endwhile
+  pause 600
+elseif skill 'magery' < 70 and mana < 20
+  useskill "meditation"
+  while mana < maxmana
+  endwhile
+  pause 600
+endif
+//training
+if skill 'magery' < 60
+  cast "lightning"
+  waitingfortarget
+  targettype! "0x8"
+  pause 1000
+elseif skill 'magery' < 70
+  cast "energy bolt"
+  waitingfortarget
+  targettype! "0x8"
+  pause 1000
+elseif skill 'magery' == 70
+  headmsg "Move out of newb dungeon!"
+  //playsound "alert.wav"
+  stop
+endif

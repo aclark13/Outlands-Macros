@@ -1,0 +1,9 @@
+getenemy 'murderer' 'humanoid'
+if @findobject 'enemy'
+  autotargetobject 'enemy'
+  playsound 'police.wav'
+  partymsg 'REDS!'
+  @cleartargetqueue
+  @cancelautotarget
+endif
+pause 5000

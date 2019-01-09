@@ -1,0 +1,49 @@
+/////////////////////////////////
+//////// Peace - Tame Macro ////////
+/////////// Version 1.0 ////////////
+/////////////////////////////////
+//Set the creature to tame
+if not @findobject "TameTarget"
+  headmsg "Select creature to tame" 55
+  promptalias 'TameTarget'
+endif
+//Start with peacemaking
+if @findobject 'TameTarget'
+  @clearjournal
+  useskill "peacemaking"
+  waitfortarget 1000
+  target! "TameTarget"
+  //pause for failed attempt
+  pause 6500
+  //if successful peace add time for the success timer and begin taming
+  if @injournal "You play successfully" "system"
+    pause 3500
+    //set taming to gain
+    if skillstate 'Animal Taming' == 'locked'
+      setskill 'Animal Taming' 'up'
+    endif
+    //attempt to tame 3x (adjust for peace duration)
+    for 3
+      useskill "animal taming"
+      waitfortarget 1000
+      target! "TameTarget"
+      pause 14000
+      //clear "TameTarget" when successfully tamed
+      if not gray "TameTarget"
+        //Lore the fresh tame to see stats
+        useskill "animal lore"
+        waitfortarget 1000
+        target! "TameTarget"
+         //Clear Tame Target
+        @unsetalias "TameTarget"
+         //Notification   
+        headmsg "Creature Tamed"
+        playsound "ding.wav"
+        setskill 'Animal Taming' 'locked'
+        stop
+      endif
+    endfor
+  else
+    replay
+  endif
+endif

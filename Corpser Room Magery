@@ -1,19 +1,32 @@
 /////////////////////////////////
 /////// Corpser Room Macro //////
-////////// Version 2.0 //////////
+////////// Version 2.1 //////////
 /////////////////////////////////
 //mana check
 if skill 'magery' < 60 and mana < 11
-  useskill "meditation"
-  while mana < maxmana
+  while maxmana > mana
+  @clearjournal
+  while not @injournal 'You enter a meditative' 'system'
+    useskill 'meditation'
+    pause 2000
   endwhile
-  pause 600
+  while not @injournal 'You stop meditating' 'system'
+    pause 100
+  endwhile
+endwhile
 elseif skill 'magery' < 70 and mana < 20
-  useskill "meditation"
-  while mana < maxmana
+  while maxmana > mana
+  @clearjournal
+  while not @injournal 'You enter a meditative' 'system'
+    useskill 'meditation'
+    pause 2000
   endwhile
-  pause 600
+  while not @injournal 'You stop meditating' 'system'
+    pause 100
+  endwhile
+endwhile
 endif
+
 //training
 if skill 'magery' < 60
   cast "lightning"

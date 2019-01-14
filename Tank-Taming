@@ -1,0 +1,150 @@
+//////////////////////////////////////////////////////////
+//                    Tank tame v1.0                    //
+//              Macro created by Ace Mason              //
+//    Thanks to Siv and Luckbox777 for help and input   //
+//  If you need help find me on discord Ace Mason#7196  //
+//                                                      //
+//    Be watchful on the release and kill, the dragons  //
+//  tend to move around and sometimes target you first  //
+//   before your pet.(note: added "All guard" to help)  //
+//////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////
+//                  Timers                  //
+//     Set up timers for taming and vet     //
+//  Taming timer is 14 sec and vet is 8 sec //
+//                                          //
+//////////////////////////////////////////////
+if not timerexists 'vet_t'
+  createtimer 'vet_t'
+  settimer 'vet_t' 8000
+endif
+if not timerexists 'taming_t'
+  createtimer 'taming_t'
+  settimer 'taming_t' 14000
+endif
+//////////////////////////////////////////////
+//                  Alias                   //
+//  Set up alias for Taming Target and Pet  //
+//                                          //
+//////////////////////////////////////////////
+//Set the taming target
+if not @findobject "TameTarget"
+  headmsg "Select creature to tame"
+  promptalias 'TameTarget'
+endif
+//Set your pet to heal
+if not @findobject "Pet"
+  headmsg "Select your tank pet"
+  promptalias 'Pet'
+endif
+//Unlock animal taming
+if skillstate 'Animal Taming' == 'locked'
+  setskill 'Animal Taming' 'up'
+endif
+///////////////////////////////////////////////////////
+//            Main Taming and Vet Macro              //
+//   If your Taming tareget is within 4 tiles the    //
+//   macro sends in your tank pet and begin taming   //
+//                                                   // 
+//    NOTE: 3 Followers is set for taming drags      //
+//  with a dragon tank. You may adject accordingly.  //  
+//                                                   //
+///////////////////////////////////////////////////////
+if @findobject 'TameTarget' 'any' 'world' 'any' '6'
+  msg "All Kill"
+  waitfortarget 10000
+  target! "TameTarget"
+  pause 6000
+  msg "All Stop"
+  pause 5000
+  while @findobject 'TameTarget' 'any' 'world' 'any' '6'
+    //jump to the rest of the macro if you tame the mob or max out gains
+    if followers > 3 or @injournal "You have already received the maximum" "system"
+      break
+    else
+      if timer 'taming_t' >= 14000
+        useskill "Animal Taming"
+        waitfortarget 1000
+        target! "TameTarget"
+        pause 600
+        settimer 'taming_t' 0
+      endif
+      //heal your pet 2x while you tame
+      if diffhits 'Pet' >= 1 and timer 'vet_t' >= 8000
+        usetype "0xe21"
+        waitfortarget 15000
+        target! "Pet"
+        settimer 'vet_t' 0
+      endif
+      //pause here to slow down the looping
+      pause 600
+    endif
+  endwhile
+endif
+//////////////////////////////////////////
+//           Successful Tame            //
+// Find out if you've tamed your target //
+//      Rename, release, and kill       //
+//                                      //
+//////////////////////////////////////////
+if followers > 3
+  //Notification
+  headmsg "Creature Tamed"
+  playsound "ding.wav"
+  setskill 'Animal Taming' 'locked'
+  pause 600
+  @rename "TameTarget" "TAMED"
+  pause 2000
+  msg 'TAMED Release'
+  waitforgump 0x909cc741 15000
+  replygump 0x909cc741 1
+  pause 2000
+  //kill fresh tame
+    msg "All guard me"
+  pause 600
+  msg "All Kill"
+  waitfortarget 10000
+  target! "TameTarget"
+  //heal your pet while it kills the released tame
+  while @findobject "TameTarget"
+    if diffhits 'Pet' >= 1 and timer 'vet_t' >= 8000
+      usetype "0xe21"
+      waitfortarget 15000
+      target! "Pet"
+      settimer 'vet_t' 0
+    endif
+  endwhile
+  //Clear Tame Target
+  @unsetalias "TameTarget"
+  stop
+endif
+//////////////////////////////////////////
+//              Maxed Gains             //
+//    Find out if you've maxed gains    //
+//          and kill off the mob        //
+//                                      //
+//////////////////////////////////////////
+if @injournal "You have already received the maximum" "system"
+  //Notification
+  headmsg "Max Gains"
+  playsound "ding.wav"
+  setskill 'Animal Taming' 'locked'
+  pause 1000
+  //kill fresh tame
+  msg "All Kill"
+  waitfortarget 10000
+  target! "TameTarget"
+  //heal your pet while it kills the released tame
+  while @findobject "TameTarget"
+    if diffhits 'Pet' >= 1 and timer 'vet_t' >= 8000
+      usetype "0xe21"
+      waitfortarget 15000
+      target! "Pet"
+      settimer 'vet_t' 0
+    endif
+  endwhile
+  //Clear Tame Target
+  @unsetalias "TameTarget"
+  stop
+endif

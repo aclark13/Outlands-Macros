@@ -1,0 +1,35 @@
+///////////////////////////////////////////////////////////////////////////////
+//Built for UO:R by Quick                                                    //
+//Will unlock, open, detect, and relock your house doors                     //
+//You can add movement to put your char inside, or just manually move in     //
+///////////////////////////////////////////////////////////////////////////////
+
+// Double Click the Key Ring
+Assistant.Macros.DoubleClickAction|1120811323|5993
+Assistant.Macros.WaitForTargetAction|30
+// Target The Door
+Assistant.Macros.AbsoluteTargetAction|0|0|1117880224|3121|350|6|1655
+// Double Click the Door to open it
+Assistant.Macros.DoubleClickAction|1117880224|1655
+// Give yourself a 2 second delay to enter the house so the macro can relock and close the door
+// Adjust this delay as needed to allow you time to enter the house.
+Assistant.Macros.PauseAction|00:00:02
+// Close door, use key, target door
+Assistant.Macros.DoubleClickAction|1117880224|1655
+Assistant.Macros.DoubleClickAction|1120811323|5993
+Assistant.Macros.WaitForTargetAction|30
+Assistant.Macros.AbsoluteTargetAction|0|0|1117880224|3121|350|6|1655
+// Use Skill Detect Hidden
+Assistant.Macros.UseSkillAction|14
+Assistant.Macros.WaitForTargetAction|30
+// Target the floor in your house
+Assistant.Macros.AbsoluteTargetAction|1|0|0|3120|348|6|1313
+Assistant.Macros.PauseAction|00:00:00.4000000
+Assistant.Macros.IfAction|4|0|you can see nothing
+Assistant.Macros.SpeechAction|0|188|3|ENU|0|All clear!
+Assistant.Macros.ElseAction
+Assistant.Macros.SpeechAction|0|38|3|ENU|2|16|52|I Ban Thee
+Assistant.Macros.WaitForTargetAction|30
+// Target Nearest Grey Humanoid
+Assistant.Macros.HotKeyAction|1517|
+Assistant.Macros.EndIfAction

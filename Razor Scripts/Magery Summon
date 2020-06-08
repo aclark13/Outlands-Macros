@@ -1,0 +1,19 @@
+#mana check
+if mana < 50
+    useskill 'meditation'
+        while mana < 50
+        endwhile
+    endif
+#Use Storage Shelf to restock
+if count 'Blood Moss' < 5
+    menu 0x415FCCB4 1
+    pause 500
+endif
+#cast summon and release
+cast 'Earth Elemental'
+pause 5000
+say "all release"
+pause 500
+gumpresponse 1
+pause 500
+loop

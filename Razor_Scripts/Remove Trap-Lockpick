@@ -1,0 +1,22 @@
+#######################################
+# create a variable in Script Options #
+# called 'tchest' before running      #
+# the script                          #
+#######################################
+
+setvar 'tchest'
+pause 500
+dclick 'tchest'
+pause 500
+skill 'hiding'
+while not insysmsg 'appears to be devoid of traps'
+    gumpresponse 7
+    waitforgump 736038070
+    wait 3000
+endwhile
+    
+while not insysmsg 'successfully pick the lock'
+    gumpresponse 4
+    waitforgump 736038070
+    wait 3000
+endwhile
